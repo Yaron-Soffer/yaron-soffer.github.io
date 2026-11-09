@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ניהול חניה בבניין · עמנואל זמיר 8 · גרסה 3.0 · 07/11/2026 -->
+<!-- ניהול חניה בבניין · עמנואל זמיר 8 · גרסה 3.1 · 09/11/2026 -->
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
@@ -152,6 +152,16 @@ form.card input[type=text], form.card input[type=number], form.card input[type=d
 .app-actions { display: flex; gap: 10px; margin-top: 12px; }
 .app-actions .submit, .app-actions .ghost { height: 44px; }
 .linkish { border: 0; background: transparent; color: var(--sign); text-decoration: underline; font-size: 14px; padding: 6px; width: 100%; margin-top: 8px; }
+.choice { display: block; width: 100%; text-align: right; border-radius: 12px; padding: 12px 14px; margin-top: 10px; border: 1.5px solid var(--sign); background: var(--surface); }
+.choice.primary { background: var(--sign); color: var(--on-sign); }
+.choice b { display: block; font-size: 15px; font-weight: 500; }
+.choice span { font-size: 12px; opacity: .85; }
+.xsteps { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 6px; }
+.xsteps div { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; }
+.xsteps b { color: var(--text); font-weight: 500; }
+.copy { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 4px 10px; font-size: 12px; margin-top: 4px; }
+.xfer-tip { display: flex; gap: 10px; align-items: flex-start; }
+.xfer-tip .ic { font-size: 20px; color: var(--sign); line-height: 1.2; }
 .foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 4px; }
 .foot button { border: 0; background: transparent; color: var(--sign); text-decoration: underline; font-size: 12px; padding: 4px; }
 
@@ -283,18 +293,32 @@ form.card input[type=text], form.card input[type=number], form.card input[type=d
 
 <div class="overlay" id="aptOverlay">
   <form class="card" id="aptForm" novalidate>
-    <h2>מה מספר הדירה שלך?</h2>
-    <div class="muted">הטלפון יזכור אותו. רק מהטלפון הזה אפשר יהיה לבטל את הבקשות והמסירות שלך.</div>
-    <label for="aptInput" class="muted" style="display:block;margin:12px 0 4px">מספר דירה</label>
-    <input type="number" id="aptInput" min="1" max="51" inputmode="numeric" style="width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:0 12px">
-    <div class="err" id="aptErr" role="alert"></div>
-    <div class="form-actions"><button class="submit" type="submit">שמור</button></div>
-    <button class="linkish" type="button" id="xferOpen">השתמשת באפליקציה בדפדפן? יש לי קוד העברה</button>
-    <div id="xferBox" hidden style="margin-top:6px">
-      <label for="xferInput" class="muted" style="display:block;margin:0 0 4px">קוד העברה, 6 ספרות</label>
-      <input type="text" id="xferInput" inputmode="numeric" maxlength="6" dir="ltr" autocomplete="one-time-code" style="width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:0 12px;text-align:center;letter-spacing:4px;font-size:20px">
+    <div id="welcomeBox" hidden>
+      <h2>ברוך הבא לאפליקציה</h2>
+      <div class="muted">השתמשת בעבר באפליקציה בדפדפן בטלפון הזה?</div>
+      <button class="choice" type="button" id="welcomeCode"><b>כן, יש לי קוד העברה</b><span>הבקשות, המסירות והשם שלך יעברו לכאן</span></button>
+      <button class="choice primary" type="button" id="welcomeNew"><b>לא, אני מתחיל מחדש</b><span>ממשיכים למספר דירה</span></button>
+    </div>
+    <div id="aptBox">
+      <h2>מה מספר הדירה שלך?</h2>
+      <div class="muted">הטלפון יזכור אותו. רק מהטלפון הזה אפשר יהיה לבטל את הבקשות והמסירות שלך.</div>
+      <label for="aptInput" class="muted" style="display:block;margin:12px 0 4px">מספר דירה</label>
+      <input type="number" id="aptInput" min="1" max="51" inputmode="numeric" style="width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:0 12px">
+      <div class="err" id="aptErr" role="alert"></div>
+      <div class="form-actions"><button class="submit" type="submit">שמור</button></div>
+    </div>
+    <div id="xferBox" hidden>
+      <h2>הזנת קוד העברה</h2>
+      <div class="xsteps">
+        <div><b>1.</b><span>פותחים את האפליקציה בדפדפן שבו השתמשת<br><button class="copy" type="button" id="copyLink">העתקת הקישור</button></span></div>
+        <div><b>2.</b><span>לוחצים שם "קבלת קוד העברה"</span></div>
+        <div><b>3.</b><span>חוזרים לכאן ומקלידים את 6 הספרות</span></div>
+      </div>
+      <label for="xferInput" class="muted" style="display:block;margin:4px 0">קוד העברה</label>
+      <input type="text" id="xferInput" inputmode="numeric" maxlength="6" dir="ltr" autocomplete="one-time-code" style="width:100%;height:52px;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:0 12px;text-align:center;letter-spacing:10px;font-size:24px;font-weight:700">
       <div class="err" id="xferErr" role="alert"></div>
       <div class="form-actions" style="margin-top:8px"><button class="submit" type="button" id="xferGo">העבר את הפרטים</button></div>
+      <button class="linkish" type="button" id="xferBack" style="text-decoration:none;color:var(--muted)">חזרה</button>
     </div>
   </form>
 </div>
@@ -302,7 +326,7 @@ form.card input[type=text], form.card input[type=number], form.card input[type=d
 <script>
 var CONFIG = window.CONFIG || { API_URL: '', ONESIGNAL_APP_ID: '' };
 var APTS = 51;
-var VERSION = '3.0';
+var VERSION = '3.1';
 var editReq = null, editOff = null;
 var GROUP_URL = 'https://chat.whatsapp.com/LEOuJTs7H9wCfbiMCOFCmb';
 var MIN_MS = 30 * 60 * 1000;
@@ -583,11 +607,20 @@ function isStandalone() { return (window.matchMedia && matchMedia('(display-mode
 function isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
 // באייפון התראות עובדות רק מהאפליקציה המותקנת. באנדרואיד גם מהדפדפן
 function pushPossible() { return !!(CONFIG.ONESIGNAL_APP_ID && 'Notification' in window && 'serviceWorker' in navigator && (isStandalone() || !isIOS())); }
+// באייפון, האפליקציה המותקנת לא רואה את מה שנשמר בדפדפן, ולכן רק שם מציעים קוד העברה
+function needsCode() { return isStandalone() && isIOS(); }
 function perm() { return window.Notification ? Notification.permission : 'unsupported'; }
 function step(n, t) { return '<div class="app-step"><b>' + n + '</b><span>' + t + '</span></div>'; }
 
 function renderAppCard() {
   var parts = [];
+  var first = Number(store.get('parkingFirstOpen')) || 0;
+  if (needsCode() && apt && !store.get('parkingXferDone') && !store.get('parkingXferHide') && Date.now() - first < 7 * 86400000) {
+    parts.push('<div class="xfer-tip"><span class="ic" aria-hidden="true">⇄</span><div><h2 style="margin:0">השתמשת בעבר באפליקציה בדפדפן?</h2>' +
+      '<div class="muted">עם קוד העברה, הבקשות והמסירות שלך יופיעו גם כאן.</div></div></div>' +
+      '<div class="app-actions"><button class="submit" type="button" data-app="xfercode">הזנת קוד העברה</button>' +
+      '<button class="ghost" type="button" data-app="xferhide">לא צריך</button></div>');
+  }
   if (!isStandalone() && !store.get('parkingInstallHide')) {
     if (isIOS()) {
       parts.push('<h2>התקנת האפליקציה</h2><div class="muted">כך היא תיפתח במסך מלא, ותוכל לקבל התראה כשתקבל חניה.</div><div class="app-steps">' +
@@ -630,6 +663,8 @@ function enablePush() {
   }).catch(function () { renderAppCard(); });
 }
 function appAction(a, btn) {
+  if (a === 'xfercode') showOverlay('code');
+  if (a === 'xferhide') { store.set('parkingXferHide', '1'); renderAppCard(); }
   if (a === 'hide') { store.set('parkingInstallHide', '1'); renderAppCard(); }
   if (a === 'pushhide') { store.set('parkingPushHide', '1'); renderAppCard(); }
   if (a === 'push') enablePush();
@@ -729,12 +764,18 @@ function myPlace(s, reqId) {
 }
 
 // ---------- דירה ----------
-function askApt() {
-  $('aptInput').value = apt || '';
-  $('aptErr').textContent = '';
-  $('xferBox').hidden = true; $('xferErr').textContent = '';
+// חלון הדירה: פתיחה (רק באייפון באפליקציה המותקנת), מספר דירה, או קוד העברה
+function showOverlay(mode) {
+  $('welcomeBox').hidden = mode !== 'welcome';
+  $('aptBox').hidden = mode !== 'apt';
+  $('xferBox').hidden = mode !== 'code';
+  $('aptInput').value = apt || ''; $('aptErr').textContent = '';
+  $('xferErr').textContent = ''; $('copyLink').textContent = 'העתקת הקישור';
   $('aptOverlay').classList.add('show');
-  setTimeout(function () { $('aptInput').focus(); }, 50);
+  if (mode === 'apt') setTimeout(function () { $('aptInput').focus(); }, 50);
+}
+function askApt() {
+  showOverlay(needsCode() && !apt && !store.get('parkingWelcomed') ? 'welcome' : 'apt');
 }
 $('aptBtn').onclick = askApt;
 $('aptInput').oninput = function () { $('aptErr').textContent = ''; };
@@ -744,12 +785,18 @@ $('aptForm').onsubmit = function (e) {
   if (!(n >= 1 && n <= APTS)) { $('aptErr').textContent = 'הכנס מספר דירה בין 1 ל־' + APTS; return; }
   apt = n; store.set('parkingApt', String(n));
   $('aptOverlay').classList.remove('show');
-  render();
+  render(); renderAppCard();
 };
 function needApt() { if (!apt) { askApt(); return true; } return false; }
 
 // קוד העברה: מקבלים את הזיהוי מהדפדפן, וממשיכים עם אותן בקשות ומסירות
-$('xferOpen').onclick = function () { $('xferBox').hidden = false; $('xferInput').focus(); };
+$('welcomeCode').onclick = function () { store.set('parkingWelcomed', '1'); showOverlay('code'); };
+$('welcomeNew').onclick = function () { store.set('parkingWelcomed', '1'); showOverlay('apt'); };
+$('xferBack').onclick = function () { if (apt) $('aptOverlay').classList.remove('show'); else askApt(); };
+$('copyLink').onclick = function () {
+  var link = location.origin + location.pathname;
+  if (copyText(link)) this.textContent = 'הקישור הועתק ✓'; else window.prompt('העתק את הקישור והדבק בדפדפן:', link);
+};
 $('xferInput').oninput = function () { $('xferErr').textContent = ''; };
 $('xferGo').onclick = function () {
   var b = this, code = $('xferInput').value.replace(/\D/g, '');
@@ -760,10 +807,11 @@ $('xferGo').onclick = function () {
     b.disabled = false;
     device = store.get('parkingDevice'); apt = Number(store.get('parkingApt')) || 0;
     if (OS) OS.login(device);
-    $('xferInput').value = ''; $('xferBox').hidden = true;
+    $('xferInput').value = ''; store.set('parkingXferDone', '1');
     $('aptOverlay').classList.remove('show');
     notify({ kind: 'ok', title: 'הפרטים הועברו', sub: apt ? 'דירה ' + apt + ' · הבקשות והמסירות שלך כאן' : '' });
-    return refresh().then(function () { if (!apt) askApt(); });
+    renderAppCard();
+    return refresh().then(function () { if (!apt) showOverlay('apt'); });
   }).catch(function (x) { b.disabled = false; $('xferErr').textContent = errMsg(x); });
 };
 
@@ -1028,6 +1076,7 @@ document.addEventListener('click', function (e) {
 
 // ---------- הפעלה ----------
 $('ver').textContent = 'גרסה ' + VERSION;
+if (needsCode() && !store.get('parkingFirstOpen')) store.set('parkingFirstOpen', String(Date.now()));
 renderAppCard();
 refresh().then(function () { if (!apt) askApt(); });
 setInterval(function () { if (!document.hidden) refresh(); }, 20000);
