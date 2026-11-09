@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!-- ניהול חניה בבניין · עמנואל זמיר 8 · גרסה 3.0 · דף מעבר לאפליקציה החדשה -->
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ניהול חניה בבניין · עמנואל זמיר 8</title>
+<style>
+:root { color-scheme: light; --bg: #ECEEF0; --surface: #FFFFFF; --text: #1B232C; --muted: #5E6873; --line: #D7DBDF; --sign: #1C4FA0; --on-sign: #FFFFFF; --paint: #F0C21B; }
+@media (prefers-color-scheme: dark) { :root { color-scheme: dark; --bg: #111417; --surface: #1B1F23; --text: #E8ECEF; --muted: #9AA4AE; --line: #30363C; --sign: #6F9CEB; --on-sign: #0E1A2E; } }
+html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 Arial, sans-serif; }
+.wrap { max-width: 420px; margin: 0 auto; padding: 40px 16px; text-align: center; }
+.sign { width: 64px; height: 64px; border-radius: 12px; background: var(--sign); color: var(--on-sign); display: grid; place-items: center; font-weight: 700; font-size: 40px; margin: 0 auto 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+h1 { font-size: 20px; margin: 0 0 8px; }
+p { color: var(--muted); margin: 0 0 18px; }
+a.go { display: block; padding: 14px; border-radius: 12px; background: var(--sign); color: var(--on-sign); font-weight: 700; text-decoration: none; font-size: 17px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sign" aria-hidden="true">P</div>
+  <div class="card">
+    <h1>האפליקציה עברה לכתובת חדשה</h1>
+    <p>הבקשות, המסירות והפרטים שלך עוברים איתך אוטומטית. בכתובת החדשה אפשר גם להתקין את האפליקציה ולקבל התראות.</p>
+    <a class="go" id="go" href="#" target="_top">מעבר לאפליקציה החדשה</a>
+  </div>
+</div>
+<script>
+var NEW_URL = 'https://yaron-soffer.github.io/';
+var keys = { d: 'parkingDevice', a: 'parkingApt', f: 'parkingFirst', l: 'parkingLast', p: 'parkingPhone', s: 'parkingSpot', x: 'parkingDismissed' };
+var m = {};
+try { for (var k in keys) { var v = localStorage.getItem(keys[k]); if (v) m[k] = v; } } catch (e) {}
+document.getElementById('go').href = NEW_URL + (m.d ? '#m=' + encodeURIComponent(JSON.stringify(m)) : '');
+</script>
+</body>
+</html>
